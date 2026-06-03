@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic AP Assistant</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="upload-card">
+
+            <div class="logo">
+                🤖
+            </div>
+
+            <h1>Agentic AP Assistant</h1>
+
+            <p class="subtitle">
+                Upload an invoice for automated validation and approval workflow
+            </p>
+
+            <div class="drop-zone" id="dropZone">
+
+                <input
+                    type="file"
+                    id="fileInput"
+                    accept=".pdf,.png,.jpg,.jpeg"
+                    hidden
+                >
+
+                <div class="upload-content">
+
+                    <div class="upload-icon">
+                        📄
+                    </div>
+
+                    <h3>Drag & Drop Invoice</h3>
+
+                    <p>or click to browse files</p>
+
+                    <button class="browse-btn">
+                        Select Invoice
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="file-preview" id="filePreview">
+                No file selected
+            </div>
+
+            <button
+                class="upload-btn"
+                id="uploadBtn"
+                disabled
+            >
+                Upload Invoice
+            </button>
+
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
