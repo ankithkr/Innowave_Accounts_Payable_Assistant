@@ -44,3 +44,7 @@ Thumbs.db
 # Project-specific uploads
 uploads/
 
+# Credentials
+backend/creds.json
+backend/service_account.json
+

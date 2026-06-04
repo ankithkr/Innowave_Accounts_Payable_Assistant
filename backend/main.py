@@ -1,15 +1,12 @@
-from fastapi import FastAPI
-from fastapi import UploadFile
-from fastapi import File
+from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-
+import shutil
 import os
 
-# Drive integration removed — storing uploads locally
+from workflow import run_workflow
 
 app = FastAPI()
 
-# Allow CORS from frontend during local development
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -29,24 +26,26 @@ os.makedirs(
 
 @app.post("/upload")
 async def upload_invoice(
-    invoice: UploadFile = File(...)
+    file: UploadFile = File(...)
 ):
 
-    file_path = (
-        f"{UPLOAD_FOLDER}/{invoice.filename}"
+    file_path = os.path.join(
+        UPLOAD_FOLDER,
+        file.filename
     )
 
-    with open(file_path, "wb") as f:
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(
+            file.file,
+            buffer
+        )
 
-        contents = await invoice.read()
-
-        f.write(contents)
-
-    size = os.path.getsize(file_path)
+    result = run_workflow(
+        file_path=file_path,
+        file_name=file.filename
+    )
 
     return {
-        "message": "Uploaded Successfully (stored locally)",
-        "filename": invoice.filename,
-        "path": file_path,
-        "size": size
+        "success": True,
+        "result": result
     }

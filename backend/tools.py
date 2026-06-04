@@ -1,11 +1,61 @@
-# Common Tools for Agents and Workflow Execution
+import fitz
+# import pdfplumber
 
-def calculate_sums(items: list) -> float:
-    """Helper tool for validating line item sum math."""
-    return sum(item.get("total_price", 0.0) for item in items)
+def is_text_extractable(text: str) -> bool:
+    """
+    Determine if PDF contains usable text.
+    """
 
-def query_historic_codings(vendor: str) -> dict:
-    """Simulates historic coding pattern lookups for GL assignment."""
-    if "google" in vendor.lower():
-        return {"gl_account": "610000 - IT Subscriptions", "cost_center": "CC-102 - Engineering"}
-    return {"gl_account": "620000 - General Office Expenses", "cost_center": "CC-101 - Admin"}
+    return len(text.strip()) > 50
+
+# def extract_pdf_text(pdf_path: str) -> str:
+
+#     text = ""
+
+#     try:
+#         doc = fitz.open(pdf_path)
+
+#         for page in doc:
+#             text += page.get_text()
+
+#         doc.close()
+
+#         if text.strip():
+#             return text
+
+#     except Exception:
+#         pass
+
+#     try:
+#         with pdfplumber.open(pdf_path) as pdf:
+
+#             for page in pdf.pages:
+#                 text += page.extract_text() or ""
+
+#         return text.strip()
+
+#     except Exception as e:
+#         print(f"Fallback Extraction Error: {e}")
+#         return ""
+
+
+def extract_pdf_text(pdf_path: str) -> str:
+    """
+    Extract text from PDF using PyMuPDF.
+    """
+
+    text = ""
+
+    try:
+        doc = fitz.open(pdf_path)
+
+        for page in doc:
+            text += page.get_text()
+
+        doc.close()
+
+        return text.strip()
+
+    except Exception as e:
+        print(f"PDF Extraction Error: {e}")
+        return ""

@@ -1,8 +1,25 @@
-class OrchestratorAgent:
-    """Orchestrator Agent routing execution flow across sub-agents."""
-    def __init__(self):
-        pass
+from models import APWorkflowState
 
-    async def manage_flow(self, file_path: str):
-        print(f"Orchestrator starting execution for {file_path}")
-        return {"status": "success"}
+
+def approval_router(state: APWorkflowState):
+    """
+    Decide whether approval agent is needed.
+    """
+
+    invoice_status = state.get("invoice_status")
+
+    if invoice_status == "NEEDS_REVIEW":
+        return "approval"
+
+    return "recommender"
+
+
+def extraction_router(state: APWorkflowState):
+    """
+    Stop workflow if extraction fails.
+    """
+
+    if state.get("extraction_status") == "FAILED":
+        return "end"
+
+    return "validator"
